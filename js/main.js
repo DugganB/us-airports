@@ -13,7 +13,7 @@ L.tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png").addTo(
 let airports = null;
 let colors = null;
 
-airports = L.geoJson.ajax("../assets/airports.geojson", {
+airports = L.geoJson.ajax("assets/airports.geojson", {
   onEachFeature: function (feature, layer) {
     let popupContent = `
       <div>
@@ -73,7 +73,7 @@ function style(feature) {
 
 var states = null;
 states = L.geoJson
-  .ajax("../assets/us-states.geojson", {
+  .ajax("assets/us-states.geojson", {
     style: style,
   })
   .addTo(mymap);
