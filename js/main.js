@@ -13,10 +13,9 @@ L.tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png").addTo(
 let airports = null;
 let colors = null;
 
-airports = L.geoJson
-  .ajax("../assets/airports.geojson", {
-    onEachFeature: function (feature, layer) {
-      let popupContent = `
+airports = L.geoJson.ajax("../assets/airports.geojson", {
+  onEachFeature: function (feature, layer) {
+    let popupContent = `
       <div>
         <h3>${feature.properties.AIRPT_NAME}</h3>
         <div>Airport Code: ${feature.properties.IATA}</div>
@@ -26,23 +25,22 @@ airports = L.geoJson
           feature.properties.CNTL_TWR === "Y" ? "Yes" : "No"
         }
       </div>`;
-      layer.bindPopup(popupContent);
-    },
-    pointToLayer: function (feature, latlng) {
-      let iconClass = "fa-plane-departure";
-      if (feature.properties.CNTL_TWR === "Y") {
-        iconClass = "fa-broadcast-tower";
-      }
-      return L.marker(latlng, {
-        icon: L.divIcon({
-          className: `fas ${iconClass}`,
-        }),
-      });
-    },
-    attribution:
-      "Airport Data &copy; Data.gov | US States &copy; Mike Bostock of D3 | Base Map &copy; CartoDB | Made By Duggan Burke",
-  })
-  .addTo(mymap);
+    layer.bindPopup(popupContent);
+  },
+  pointToLayer: function (feature, latlng) {
+    let iconClass = "fa-plane-departure";
+    if (feature.properties.CNTL_TWR === "Y") {
+      iconClass = "fa-broadcast-tower";
+    }
+    return L.marker(latlng, {
+      icon: L.divIcon({
+        className: `fas ${iconClass}`,
+      }),
+    });
+  },
+  attribution:
+    "Airport Data &copy; Data.gov | US States &copy; Mike Bostock of D3 | Base Map &copy; CartoDB | Made By Duggan Burke",
+});
 
 colors = chroma.scale(["fff", "#004643"]).colors(6);
 
@@ -109,3 +107,11 @@ legend.onAdd = function () {
 legend.addTo(mymap);
 
 L.control.scale({ position: "bottomleft" }).addTo(mymap);
+
+mymap.on("zoomend", function () {
+  if (mymap.getZoom() < 6) {
+    mymap.removeLayer(airports);
+  } else {
+    airports.addTo(mymap);
+  }
+});
