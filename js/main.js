@@ -10,19 +10,8 @@ L.tileLayer("http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png").addTo(
   mymap
 );
 
-var airports = null;
-
-for (i = 0; i < 9; i++) {
-  $("head").append(
-    $(
-      "<style> .marker-color-" +
-        (i + 1).toString() +
-        " { color: " +
-        colors[i] +
-        "; font-size: 15px; text-shadow: 0 0 3px #ffffff;} </style>"
-    )
-  );
-}
+let airports = null;
+let colors = null;
 
 airports = L.geoJson
   .ajax("../assets/airports.geojson", {
@@ -37,7 +26,6 @@ airports = L.geoJson
           feature.properties.CNTL_TWR === "Y" ? "Yes" : "No"
         }
       </div>`;
-      c;
       layer.bindPopup(popupContent);
     },
     pointToLayer: function (feature, latlng) {
